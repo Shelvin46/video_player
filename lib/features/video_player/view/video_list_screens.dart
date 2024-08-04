@@ -35,16 +35,16 @@ class _VideoListScreensState extends State<VideoListScreens> {
 
               return ListView.separated(
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const ScrollPhysics(),
                 itemCount: controller.videos.length,
                 itemBuilder: (context, index) {
                   final video = controller.videos[index];
                   return GestureDetector(
                     onTap: () {
                       context.push(
-                        const VideoPlayerScreen(),
+                        VideoPlayerScreen(),
                       );
-                      controller.playVideo(video.videoUrl);
+                      controller.playVideo(video.videoUrl, index);
                     },
                     child: VideoTile(
                       title: video.videoTitle,
