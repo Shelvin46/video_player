@@ -1,4 +1,5 @@
 // import 'package:awesome_extensions/awesome_extensions.dart'as awesome;
+import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class VideoPlayerScreen extends StatelessWidget {
     return PopScope(
       onPopInvoked: (didPop) {
         videoController.videoPlayerController.value.dispose();
-        videoController.chewieController.value.dispose();
+        videoController.betterPlayerController.value.dispose();
       },
       child: Scaffold(
         body: GetX<VideoController>(builder: (controller) {
@@ -50,7 +51,7 @@ class VideoPlayerScreen extends StatelessWidget {
               ),
             );
           } else {
-            controller.videoPlayerController.value.play();
+            // controller.videoPlayerController.value.play();≥
             return SafeArea(
               child: Column(
                 children: [
@@ -59,8 +60,8 @@ class VideoPlayerScreen extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: controller
                             .videoPlayerController.value.value.aspectRatio,
-                        child: Chewie(
-                          controller: controller.chewieController.value,
+                        child: BetterPlayer(
+                          controller: controller.betterPlayerController.value,
                         ),
                       ),
                     ),

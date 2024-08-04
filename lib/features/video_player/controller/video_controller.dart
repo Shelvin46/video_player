@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:chewie/chewie.dart';
-import 'package:flutter/material.dart';
+import 'package:better_player/better_player.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_player_app/features/video_player/model/video_model_class.dart';
@@ -17,9 +16,11 @@ class VideoController extends GetxController {
     Uri.parse(""),
   ).obs;
 
-  var chewieController = ChewieController(
-    videoPlayerController: VideoPlayerController.networkUrl(
-      Uri.parse(""),
+  var betterPlayerController = BetterPlayerController(
+    const BetterPlayerConfiguration(),
+    betterPlayerDataSource: BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      '',
     ),
   ).obs;
 
@@ -53,29 +54,16 @@ class VideoController extends GetxController {
         await videoPlayerController.value.initialize();
       }
       isLoading.value = false;
-      chewieController.value = ChewieController(
-        videoPlayerController: videoPlayerController.value,
-        autoPlay: true,
-        looping: false,
-        hideControlsTimer: const Duration(seconds: 1),
-        additionalOptions: (context) {
-          return [
-            OptionItem(
-              iconData: Icons.skip_previous,
-              onTap: () {
-                playPreviousVideo();
-              },
-              title: "Previous",
-            ),
-            OptionItem(
-              iconData: Icons.skip_next,
-              onTap: () {
-                playNextVideo();
-              },
-              title: "Next",
-            ),
-          ];
-        },
+      betterPlayerController.value = BetterPlayerController(
+        const BetterPlayerConfiguration(
+          autoPlay: true,
+          allowedScreenSleep: false,
+          controlsConfiguration: BetterPlayerControlsConfiguration(),
+        ),
+        betterPlayerDataSource: BetterPlayerDataSource(
+          BetterPlayerDataSourceType.network,
+          videoUrl,
+        ),
       );
     } catch (e) {
       if (e is HttpException) {
@@ -115,7 +103,7 @@ class VideoController extends GetxController {
   @override
   void onClose() {
     videoPlayerController.value.dispose();
-    chewieController.value.dispose();
+    betterPlayerController.value.dispose();
     super.onClose();
   }
 }

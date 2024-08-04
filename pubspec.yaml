@@ -39,10 +39,12 @@ dependencies:
   google_fonts: ^6.2.1
   equatable: ^2.0.5
   get: ^4.6.6
-  awesome_extensions: ^2.0.17
+  awesome_extensions: ^2.0.16
   cached_network_image: ^3.4.0
   video_player: ^2.9.1
   chewie: ^1.7.5
+  better_player: ^0.0.84
+  wakelock_plus: ^1.1.4
 
 dev_dependencies:
   flutter_test:
