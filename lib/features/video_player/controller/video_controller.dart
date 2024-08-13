@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:better_player/better_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_player_app/features/video_player/model/video_model_class.dart';
@@ -16,11 +16,9 @@ class VideoController extends GetxController {
     Uri.parse(""),
   ).obs;
 
-  var betterPlayerController = BetterPlayerController(
-    const BetterPlayerConfiguration(),
-    betterPlayerDataSource: BetterPlayerDataSource(
-      BetterPlayerDataSourceType.network,
-      '',
+  var chewieController = ChewieController(
+    videoPlayerController: VideoPlayerController.networkUrl(
+      Uri.parse(""),
     ),
   ).obs;
 
@@ -53,18 +51,18 @@ class VideoController extends GetxController {
       if (!videoPlayerController.value.value.isInitialized) {
         await videoPlayerController.value.initialize();
       }
-      isLoading.value = false;
-      betterPlayerController.value = BetterPlayerController(
-        const BetterPlayerConfiguration(
-          autoPlay: true,
-          allowedScreenSleep: false,
-          controlsConfiguration: BetterPlayerControlsConfiguration(),
-        ),
-        betterPlayerDataSource: BetterPlayerDataSource(
-          BetterPlayerDataSourceType.network,
-          videoUrl,
-        ),
+
+      chewieController.value = ChewieController(
+        videoPlayerController: videoPlayerController.value,
+        autoPlay: true,
+        looping: false,
+        allowFullScreen: true,
+        allowMuting: true,
+        showControls: false,
+        aspectRatio: videoPlayerController.value.value.aspectRatio,
       );
+
+      isLoading.value = false;
     } catch (e) {
       if (e is HttpException) {
         error.value = "Video not found";
@@ -103,7 +101,7 @@ class VideoController extends GetxController {
   @override
   void onClose() {
     videoPlayerController.value.dispose();
-    betterPlayerController.value.dispose();
+    chewieController.value.dispose();
     super.onClose();
   }
 }
